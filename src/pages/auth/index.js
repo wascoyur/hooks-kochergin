@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import useFetch from '../../hooks/useFech';
@@ -8,24 +8,35 @@ const Auth = props => {
   const pageTitle = isLogin ? 'Вход' : 'Регистрация';
   const descriptionLink = isLogin ? '/login' : '/register';
   const descriptionText = isLogin ? 'Нужен аккаунт?' : 'Уже есть аккаунт?';
-  const apiUrl = isLogin ? '/users/login' : '/users'
-  const [username, setUsername] = useState('')
+  const apiUrl = isLogin ? '/users/login' : '/users';
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [{ response, isLoading, error }, doFetch] = useFetch(apiUrl);
+  const [isSuccessSubmit, setSuccessSubmit] = useState(false);
 
   const handleEvent = e => {
     e.preventDefault();
-    const user = isLogin ? ({email, password}) : ({email, password, username});
+    const user = isLogin ? { email, password } : { email, password, username };
     console.log('user', user);
 
     doFetch({
       method: 'post',
       data: {
-        user
+        user,
       },
     });
   };
+
+  useEffect(() => {
+    if (!response) return;
+    console.log('resp', response);
+    localStorage.setItem('token', response.user.token);
+  }, [response]);
+
+  if (isSuccessSubmit) {
+    return <Redirect to='/'/>
+  }
 
   return (
     <div className='auth-page'>
@@ -37,7 +48,7 @@ const Auth = props => {
               <Link to={descriptionLink}>{descriptionText}</Link>
             </p>
             <form onSubmit={handleEvent}>
-              {isLogin ? (null):(
+              {isLogin ? null : (
                 <fieldset className='form-group'>
                   <input
                     type='text'
