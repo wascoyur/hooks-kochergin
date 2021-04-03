@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const Auth = () => {
   const [email, setEmail] = useState('');
@@ -7,8 +7,12 @@ const Auth = () => {
   const handleEvent = e => {
     e.preventDefault();
     console.log('data:', email, password);
-
   };
+
+  useEffect(() => {
+    console.log('triggert');
+    document.title = email
+  }, [email]);
   return (
     <div className='auth-page'>
       <div className='container page'>
