@@ -1,9 +1,10 @@
 import { Link, Redirect } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import useFetch from '../../hooks/useFech';
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 const Auth = props => {
+
   const isLogin = props.match.path === '/login';
   const pageTitle = isLogin ? 'Вход' : 'Регистрация';
   const descriptionLink = isLogin ? '/login' : '/register';
@@ -14,6 +15,7 @@ const Auth = props => {
   const [password, setPassword] = useState('');
   const [{ response, isLoading, error }, doFetch] = useFetch(apiUrl);
   const [isSuccessSubmit, setSuccessSubmit] = useState(false);
+  const [token, setToken] = useLocalStorage('token');
 
   const handleEvent = e => {
     e.preventDefault();
@@ -31,7 +33,8 @@ const Auth = props => {
   useEffect(() => {
     if (!response) return;
     console.log('resp', response);
-    localStorage.setItem('token', response.user.token);
+    setToken(response.user.token);
+    setSuccessSubmit(true )
   }, [response]);
 
   if (isSuccessSubmit) {
