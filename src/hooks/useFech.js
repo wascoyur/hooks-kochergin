@@ -18,7 +18,8 @@ const useFetch = url => {
     if (!isLoading) {
       return;
     }
-    console.log('triggert', );
+    console.log('opt', options);
+
     axios(baseUrl + url, options)
       .then(res => {
         console.log('success:', res);
