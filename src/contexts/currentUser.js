@@ -2,7 +2,7 @@ import { createContext, useState } from 'react';
 
 export const CurrentUserContext = createContext([{}, () => {}]);
 
-export const CurrentuserProvider = ({ childen }) => {
+export const CurrentUserProvider = ({ childen }) => {
   const [state, setState] = useState({
     isLoadinf: false,
     isLoggedIn: null,
