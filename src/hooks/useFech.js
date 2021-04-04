@@ -18,11 +18,11 @@ const useFetch = url => {
     if (!isLoading) {
       return;
     }
-    console.log('opt', options);
+    //console.log('opt', options);
 
     axios(baseUrl + url, options)
       .then(res => {
-        console.log('success:', res);
+        // console.log('success:', res);
         setLoading(false);
         setResponse(res.data);
       })

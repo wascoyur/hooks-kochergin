@@ -3,6 +3,7 @@ import { useState, useEffect, useContext } from 'react';
 import useFetch from '../../hooks/useFech';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { CurrentUserContext } from '../../contexs/currentUser';
+import BackendErrorMessage from './components/BackendErrorMessage.js'
 
 const Auth = props => {
   const isLogin = props.match.path === '/login';
@@ -13,20 +14,20 @@ const Auth = props => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [{ response, isLoading }, doFetch] = useFetch(apiUrl);
+  const [{ response, isLoading, error }, doFetch] = useFetch(apiUrl);
   const [isSuccessSubmit, setSuccessSubmit] = useState(false);
   const [, setToken] = useLocalStorage('token');
   const [currentUserState, setCurrentUserState] = useContext(
     CurrentUserContext
   );
 
-  console.log('currentUserState', currentUserState);
+  // console.log('currentUserState', currentUserState);
 
 
   const handleEvent = e => {
     e.preventDefault();
     const user = isLogin ? { email, password } : { email, password, username };
-    console.log('user', user);
+    // console.log('user', user);
 
     doFetch({
       method: 'post',
@@ -63,6 +64,7 @@ const Auth = props => {
               <Link to={descriptionLink}>{descriptionText}</Link>
             </p>
             <form onSubmit={handleEvent}>
+              {error && <BackendErrorMessage backendError={error.errors} />}
               {isLogin ? null : (
                 <fieldset className='form-group'>
                   <input
